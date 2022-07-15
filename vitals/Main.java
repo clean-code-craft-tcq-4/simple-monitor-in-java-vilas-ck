@@ -1,23 +1,36 @@
 package vitals;
 
 public class Main {
-    static boolean batteryIsOk(float temperature, float soc, float chargeRate) {
-        if(temperature < 0 || temperature > 45) {
-            System.out.println("Temperature is out of range!");
-            return false;
-        } else if(soc < 20 || soc > 80) {
-            System.out.println("State of Charge is out of range!");
-            return false;
-        } else if(chargeRate > 0.8) {
-            System.out.println("Charge Rate is out of range!");
-            return false;
-        }
-        return true;
-    }
 
-    public static void main(String[] args) {
-        assert(batteryIsOk(25, 70, 0.7f) == true);
-        assert(batteryIsOk(50, 85, 0.0f) == false);
-        System.out.println("Some more tests needed");
+    public static void main(final String[] args) {
+        VitalBatteryTest vitalBatteryTest = new VitalBatteryTest();
+        Vitals vitals;
+
+        vitals = new Temperature(32f);
+        vitalBatteryStatusTest(vitals, vitalBatteryTest);
+
+        vitals = new Soc(65f);
+        vitalBatteryStatusTest(vitals, vitalBatteryTest);
+
+        vitals = new Soc(75.7f);
+        vitalBatteryStatusTest(vitals, vitalBatteryTest);
+
+        vitals = new ChargeRate(0.7f);
+        vitalBatteryStatusTest(vitals, vitalBatteryTest);
+
+        vitals = new Temperature(1000f);
+        vitalBatteryStatusTest(vitals, vitalBatteryTest);
+
+        vitals = new Soc(85f);
+        vitalBatteryStatusTest(vitals, vitalBatteryTest);
+
+        vitals = new Soc(-0.78f);
+        vitalBatteryStatusTest(vitals, vitalBatteryTest);
+
+        vitals = new ChargeRate(0.8f);
+        vitalBatteryStatusTest(vitals, vitalBatteryTest);
+    }
+    private static void vitalBatteryStatusTest(final Vitals vitals, final VitalBatteryTest vitalTests) {
+        vitalTests.assertVitalsRange(vitals.checkVitalsRangeStatus(), vitals.getClass().getSimpleName());
     }
 }
